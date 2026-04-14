@@ -20,6 +20,7 @@ import { Route as PosterPosterIdRouteImport } from './routes/poster.$posterId'
 import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
 import { Route as AdminPostersRouteImport } from './routes/admin.posters'
 import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AccountProfileRouteImport } from './routes/account.profile'
 import { Route as AccountOrdersRouteImport } from './routes/account.orders'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as AdminPostersNewRouteImport } from './routes/admin.posters.new'
@@ -80,6 +81,11 @@ const AdminOrdersRoute = AdminOrdersRouteImport.update({
   path: '/orders',
   getParentRoute: () => AdminRoute,
 } as any)
+const AccountProfileRoute = AccountProfileRouteImport.update({
+  id: '/account/profile',
+  path: '/account/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AccountOrdersRoute = AccountOrdersRouteImport.update({
   id: '/account/orders',
   path: '/account/orders',
@@ -111,6 +117,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/account/orders': typeof AccountOrdersRoute
+  '/account/profile': typeof AccountProfileRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/posters': typeof AdminPostersRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
@@ -128,6 +135,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/account/orders': typeof AccountOrdersRoute
+  '/account/profile': typeof AccountProfileRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/posters': typeof AdminPostersRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
@@ -146,6 +154,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/signup': typeof SignupRoute
   '/account/orders': typeof AccountOrdersRoute
+  '/account/profile': typeof AccountProfileRoute
   '/admin/orders': typeof AdminOrdersRoute
   '/admin/posters': typeof AdminPostersRouteWithChildren
   '/admin/settings': typeof AdminSettingsRoute
@@ -165,6 +174,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/account/orders'
+    | '/account/profile'
     | '/admin/orders'
     | '/admin/posters'
     | '/admin/settings'
@@ -182,6 +192,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/account/orders'
+    | '/account/profile'
     | '/admin/orders'
     | '/admin/posters'
     | '/admin/settings'
@@ -199,6 +210,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/signup'
     | '/account/orders'
+    | '/account/profile'
     | '/admin/orders'
     | '/admin/posters'
     | '/admin/settings'
@@ -217,6 +229,7 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   SignupRoute: typeof SignupRoute
   AccountOrdersRoute: typeof AccountOrdersRoute
+  AccountProfileRoute: typeof AccountProfileRoute
   PosterPosterIdRoute: typeof PosterPosterIdRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminOrdersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/account/profile': {
+      id: '/account/profile'
+      path: '/account/profile'
+      fullPath: '/account/profile'
+      preLoaderRoute: typeof AccountProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account/orders': {
       id: '/account/orders'
       path: '/account/orders'
@@ -368,6 +388,7 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   SignupRoute: SignupRoute,
   AccountOrdersRoute: AccountOrdersRoute,
+  AccountProfileRoute: AccountProfileRoute,
   PosterPosterIdRoute: PosterPosterIdRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }

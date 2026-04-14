@@ -28,7 +28,7 @@ export default function Header() {
       <nav className="page-wrap py-3">
         <div className="grid items-center gap-3 border-b border-[var(--line)] pb-3 sm:grid-cols-[1fr_auto_1fr]">
           <div className="text-[10px] font-semibold tracking-[0.14em] text-[var(--sea-ink-soft)] uppercase">
-            NP / NRP
+            EN / INR
           </div>
 
           <h2 className="m-0 text-center text-lg font-semibold tracking-[0.1em] text-[var(--sea-ink)] uppercase">
@@ -101,6 +101,13 @@ export default function Header() {
               activeProps={{ className: 'nav-link is-active' }}
             >
               Orders
+            </Link>
+            <Link
+              to="/account/profile"
+              className="nav-link"
+              activeProps={{ className: 'nav-link is-active' }}
+            >
+              Profile
             </Link>
           </div>
         )}
