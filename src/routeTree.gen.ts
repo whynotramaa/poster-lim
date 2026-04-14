@@ -9,9 +9,47 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as CartRouteImport } from './routes/cart'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PosterPosterIdRouteImport } from './routes/poster.$posterId'
+import { Route as AdminSettingsRouteImport } from './routes/admin.settings'
+import { Route as AdminPostersRouteImport } from './routes/admin.posters'
+import { Route as AdminOrdersRouteImport } from './routes/admin.orders'
+import { Route as AccountOrdersRouteImport } from './routes/account.orders'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as AdminPostersNewRouteImport } from './routes/admin.posters.new'
+import { Route as AdminPostersPosterIdEditRouteImport } from './routes/admin.posters.$posterId.edit'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -22,35 +60,204 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PosterPosterIdRoute = PosterPosterIdRouteImport.update({
+  id: '/poster/$posterId',
+  path: '/poster/$posterId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSettingsRoute = AdminSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminPostersRoute = AdminPostersRouteImport.update({
+  id: '/posters',
+  path: '/posters',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminOrdersRoute = AdminOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AccountOrdersRoute = AccountOrdersRouteImport.update({
+  id: '/account/orders',
+  path: '/account/orders',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPostersNewRoute = AdminPostersNewRouteImport.update({
+  id: '/new',
+  path: '/new',
+  getParentRoute: () => AdminPostersRoute,
+} as any)
+const AdminPostersPosterIdEditRoute =
+  AdminPostersPosterIdEditRouteImport.update({
+    id: '/$posterId/edit',
+    path: '/$posterId/edit',
+    getParentRoute: () => AdminPostersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/account/orders': typeof AccountOrdersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/posters': typeof AdminPostersRouteWithChildren
+  '/admin/settings': typeof AdminSettingsRoute
+  '/poster/$posterId': typeof PosterPosterIdRoute
+  '/admin/posters/new': typeof AdminPostersNewRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/posters/$posterId/edit': typeof AdminPostersPosterIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/account/orders': typeof AccountOrdersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/posters': typeof AdminPostersRouteWithChildren
+  '/admin/settings': typeof AdminSettingsRoute
+  '/poster/$posterId': typeof PosterPosterIdRoute
+  '/admin/posters/new': typeof AdminPostersNewRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/posters/$posterId/edit': typeof AdminPostersPosterIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
+  '/login': typeof LoginRoute
+  '/signup': typeof SignupRoute
+  '/account/orders': typeof AccountOrdersRoute
+  '/admin/orders': typeof AdminOrdersRoute
+  '/admin/posters': typeof AdminPostersRouteWithChildren
+  '/admin/settings': typeof AdminSettingsRoute
+  '/poster/$posterId': typeof PosterPosterIdRoute
+  '/admin/posters/new': typeof AdminPostersNewRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/admin/posters/$posterId/edit': typeof AdminPostersPosterIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/login'
+    | '/signup'
+    | '/account/orders'
+    | '/admin/orders'
+    | '/admin/posters'
+    | '/admin/settings'
+    | '/poster/$posterId'
+    | '/admin/posters/new'
+    | '/api/auth/$'
+    | '/admin/posters/$posterId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to:
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/login'
+    | '/signup'
+    | '/account/orders'
+    | '/admin/orders'
+    | '/admin/posters'
+    | '/admin/settings'
+    | '/poster/$posterId'
+    | '/admin/posters/new'
+    | '/api/auth/$'
+    | '/admin/posters/$posterId/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admin'
+    | '/cart'
+    | '/checkout'
+    | '/login'
+    | '/signup'
+    | '/account/orders'
+    | '/admin/orders'
+    | '/admin/posters'
+    | '/admin/settings'
+    | '/poster/$posterId'
+    | '/admin/posters/new'
+    | '/api/auth/$'
+    | '/admin/posters/$posterId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
+  LoginRoute: typeof LoginRoute
+  SignupRoute: typeof SignupRoute
+  AccountOrdersRoute: typeof AccountOrdersRoute
+  PosterPosterIdRoute: typeof PosterPosterIdRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -65,12 +272,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/poster/$posterId': {
+      id: '/poster/$posterId'
+      path: '/poster/$posterId'
+      fullPath: '/poster/$posterId'
+      preLoaderRoute: typeof PosterPosterIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/settings': {
+      id: '/admin/settings'
+      path: '/settings'
+      fullPath: '/admin/settings'
+      preLoaderRoute: typeof AdminSettingsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/posters': {
+      id: '/admin/posters'
+      path: '/posters'
+      fullPath: '/admin/posters'
+      preLoaderRoute: typeof AdminPostersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/orders': {
+      id: '/admin/orders'
+      path: '/orders'
+      fullPath: '/admin/orders'
+      preLoaderRoute: typeof AdminOrdersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/account/orders': {
+      id: '/account/orders'
+      path: '/account/orders'
+      fullPath: '/account/orders'
+      preLoaderRoute: typeof AccountOrdersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/posters/new': {
+      id: '/admin/posters/new'
+      path: '/new'
+      fullPath: '/admin/posters/new'
+      preLoaderRoute: typeof AdminPostersNewRouteImport
+      parentRoute: typeof AdminPostersRoute
+    }
+    '/admin/posters/$posterId/edit': {
+      id: '/admin/posters/$posterId/edit'
+      path: '/$posterId/edit'
+      fullPath: '/admin/posters/$posterId/edit'
+      preLoaderRoute: typeof AdminPostersPosterIdEditRouteImport
+      parentRoute: typeof AdminPostersRoute
+    }
   }
 }
+
+interface AdminPostersRouteChildren {
+  AdminPostersNewRoute: typeof AdminPostersNewRoute
+  AdminPostersPosterIdEditRoute: typeof AdminPostersPosterIdEditRoute
+}
+
+const AdminPostersRouteChildren: AdminPostersRouteChildren = {
+  AdminPostersNewRoute: AdminPostersNewRoute,
+  AdminPostersPosterIdEditRoute: AdminPostersPosterIdEditRoute,
+}
+
+const AdminPostersRouteWithChildren = AdminPostersRoute._addFileChildren(
+  AdminPostersRouteChildren,
+)
+
+interface AdminRouteChildren {
+  AdminOrdersRoute: typeof AdminOrdersRoute
+  AdminPostersRoute: typeof AdminPostersRouteWithChildren
+  AdminSettingsRoute: typeof AdminSettingsRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminOrdersRoute: AdminOrdersRoute,
+  AdminPostersRoute: AdminPostersRouteWithChildren,
+  AdminSettingsRoute: AdminSettingsRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
+  CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
+  LoginRoute: LoginRoute,
+  SignupRoute: SignupRoute,
+  AccountOrdersRoute: AccountOrdersRoute,
+  PosterPosterIdRoute: PosterPosterIdRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

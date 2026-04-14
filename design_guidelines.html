@@ -1,0 +1,315 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+  .wrap { padding: 1.5rem 0; max-width: 860px; }
+  .section { margin-bottom: 2.5rem; }
+  .section-label { font-size: 10px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: 0.75rem; }
+  h2 { font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1rem; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 0.35rem; }
+  .card-body { font-size: 13px; color: var(--color-text-secondary); line-height: 1.65; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; }
+  .chip { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; margin: 3px 3px 3px 0; }
+  .swatch-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 0.5rem; }
+  .swatch { width: 36px; height: 36px; border-radius: 6px; border: 0.5px solid var(--color-border-tertiary); display: flex; align-items: flex-end; padding: 2px 4px; }
+  .swatch-label { font-size: 9px; }
+  .rule { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 2rem 0; }
+  .do-dont { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .do { border-left: 2px solid #1D9E75; }
+  .dont { border-left: 2px solid #E24B4A; }
+  .tag { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 0.35rem; }
+  .tag.do-tag { color: #0F6E56; }
+  .tag.dont-tag { color: #A32D2D; }
+  .nav-demo { display: flex; align-items: center; justify-content: space-between; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 16px; margin-top: 0.5rem; }
+  .nav-links { display: flex; gap: 18px; }
+  .nav-link { font-size: 12px; color: var(--color-text-secondary); }
+  .nav-logo { font-size: 15px; font-weight: 500; letter-spacing: 0.06em; color: var(--color-text-primary); }
+  .nav-actions { display: flex; gap: 12px; align-items: center; }
+  .nav-icon { width: 20px; height: 20px; border-radius: 50%; border: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; justify-content: center; }
+  .product-card-demo { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 0; overflow: hidden; }
+  .product-img { background: var(--color-background-secondary); height: 100px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--color-text-tertiary); border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .product-info { padding: 10px 12px; }
+  .product-name { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .product-price { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+  .filter-demo { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 12px 14px; }
+  .filter-section { margin-bottom: 12px; }
+  .filter-title { font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .filter-item { display: flex; align-items: center; justify-content: space-between; padding: 3px 0; font-size: 12px; color: var(--color-text-secondary); }
+  .filter-count { font-size: 11px; color: var(--color-text-tertiary); }
+  .checkbox-fake { width: 12px; height: 12px; border: 0.5px solid var(--color-border-secondary); border-radius: 2px; margin-right: 7px; }
+  .badge { font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 3px; }
+  .badge-new { background: #1D9E75; color: #E1F5EE; }
+  .badge-excl { background: #E24B4A; color: #FCEBEB; }
+  .hero-demo { background: #F5F2EF; border-radius: var(--border-radius-lg); padding: 2rem 1.5rem; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 12px; }
+  .hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: #5F5E5A; }
+  .hero-title { font-size: 32px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; color: #2C2C2A; }
+  .hero-cta { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: #2C2C2A; border-bottom: 1.5px solid #2C2C2A; width: fit-content; padding-bottom: 2px; }
+  .ticker { background: #2C2C2A; color: #F5F2EF; padding: 6px 0; font-size: 10px; letter-spacing: 0.1em; text-align: center; border-radius: 4px; }
+  .type-demo { display: flex; flex-direction: column; gap: 6px; padding: 0.75rem 0; }
+  .type-row { display: flex; align-items: baseline; gap: 12px; }
+  .type-spec { font-size: 11px; color: var(--color-text-tertiary); min-width: 90px; }
+  .type-example { color: var(--color-text-primary); }
+  .spacing-demo { display: flex; gap: 8px; align-items: flex-end; padding: 0.5rem 0; }
+  .sp-block { background: var(--color-background-info); border-radius: 3px; flex-shrink: 0; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 3px; }
+  .sp-label { font-size: 10px; color: var(--color-text-info); }
+</style>
+
+<div class="wrap">
+
+  <div class="section">
+    <div class="section-label">Reference Analysis</div>
+    <h2>Design brief</h2>
+    <p style="font-size:14px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:1rem;">These guidelines synthesise two references: a military-inspired apparel catalog (structured, utility-forward) and a minimal warm-toned editorial storefront (typographic, atmosphere-first). The result is a modern fashion e-commerce design system that balances discovery utility with brand personality.</p>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">Reference A — utility catalog</div>
+        <div class="card-body">Left sidebar filters, dense product grid, functional badges (NEW, ONLINE EXCLUSIVE), structured category taxonomy, high information density.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Reference B — editorial hero</div>
+        <div class="card-body">Warm beige/cream palette, oversized display type overlaid on photography, horizontal social links bar, scrolling marquee ticker, maximal whitespace.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <div class="section-label">Visual Identity</div>
+    <h2>Color system</h2>
+    <div class="card">
+      <div class="card-title">Neutral foundation — always warm, never cold</div>
+      <div class="card-body">Build on warm off-whites and near-blacks. Avoid pure #FFFFFF and #000000 — they read as generic. Use a warm paper white for backgrounds and a charcoal (not black) for type.</div>
+      <div class="swatch-row" style="margin-top:0.75rem;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#F5F2EF;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">BG primary</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#EDEAE6;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">BG secondary</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#D3D1C7;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">Border</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#5F5E5A;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">Body text</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#2C2C2A;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">Heading</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#E35A30;border:none;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">Accent</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="swatch" style="background:#1D9E75;border:none;"></div><span style="font-size:10px;color:var(--color-text-tertiary);">Success</span></div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:0.75rem;">
+      <div class="card-title">Single accent rule</div>
+      <div class="card-body">Use one accent color (warm orange-red) sparingly: badges only, sale prices, and interactive hover states. Never use it for decorative fills. This gives it maximum signal power.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Typography</div>
+    <h2>Type scale</h2>
+    <div class="card">
+      <div class="type-demo">
+        <div class="type-row"><span class="type-spec">Display / 52–64px</span><span class="type-example" style="font-size:32px;font-weight:500;letter-spacing:-0.02em;line-height:1;">BRAND NAME</span></div>
+        <div style="height:1px;background:var(--color-border-tertiary);margin:4px 0;"></div>
+        <div class="type-row"><span class="type-spec">H1 / 28–32px / 500</span><span class="type-example" style="font-size:22px;font-weight:500;letter-spacing:-0.01em;">Men's shop all</span></div>
+        <div class="type-row"><span class="type-spec">H2 / 18–22px / 500</span><span class="type-example" style="font-size:17px;font-weight:500;">Category heading</span></div>
+        <div class="type-row"><span class="type-spec">Body / 14–15px / 400</span><span class="type-example" style="font-size:13px;color:var(--color-text-secondary);">Product description and filter labels</span></div>
+        <div class="type-row"><span class="type-spec">Label / 11px / 500 caps</span><span class="type-example" style="font-size:11px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-text-tertiary);">NEW ARRIVAL</span></div>
+        <div class="type-row"><span class="type-spec">Price / 14px / 500</span><span class="type-example" style="font-size:13px;font-weight:500;">$160.00</span></div>
+      </div>
+      <div class="card-body" style="margin-top:0.5rem;">Display type can use uppercase and tight tracking for brand personality. All other text uses sentence case. Choose a single geometric sans for the entire site — it unifies both references.</div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <div class="section-label">Layout System</div>
+    <h2>Page structure</h2>
+    <div class="grid2" style="margin-bottom:0.75rem;">
+      <div class="card">
+        <div class="card-title">Navigation bar</div>
+        <div class="nav-demo">
+          <span style="font-size:10px;color:var(--color-text-tertiary);">LANG</span>
+          <div class="nav-links">
+            <span class="nav-link">MEN</span>
+            <span class="nav-link">WOMEN</span>
+            <span class="nav-link">KIDS</span>
+          </div>
+          <span class="nav-logo">BRAND</span>
+          <div class="nav-actions">
+            <span style="font-size:11px;color:var(--color-text-secondary);">Search</span>
+            <span style="font-size:11px;color:var(--color-text-secondary);">Bag</span>
+          </div>
+        </div>
+        <div class="card-body" style="margin-top:0.75rem;">Two-row nav: utility row (language, search, account, cart) above category nav. Logo centered. Full-width with 1px bottom border.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Marquee ticker</div>
+        <div class="ticker" style="margin:0.5rem 0;">FREE SHIPPING OVER $150 &nbsp;&nbsp;&bull;&nbsp;&nbsp; NEW ARRIVALS &nbsp;&nbsp;&bull;&nbsp;&nbsp; ONLINE EXCLUSIVE &nbsp;&nbsp;&bull;&nbsp;&nbsp;</div>
+        <div class="card-body">Used for promotions, collaborations, and shipping notices. Dark background inverts the color scheme for high contrast. Keep copy short (5–8 words per item).</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Grid anatomy — catalog page</div>
+      <div style="display:grid;grid-template-columns:200px 1fr;gap:12px;margin-top:0.75rem;">
+        <div class="filter-demo">
+          <div class="filter-section">
+            <div class="filter-title">Category</div>
+            <div class="filter-item"><div style="display:flex;align-items:center;"><div class="checkbox-fake"></div>Outerwear</div><span class="filter-count">(78)</span></div>
+            <div class="filter-item"><div style="display:flex;align-items:center;"><div class="checkbox-fake"></div>Bomber</div><span class="filter-count">(46)</span></div>
+            <div class="filter-item"><div style="display:flex;align-items:center;"><div class="checkbox-fake"></div>T-shirts</div><span class="filter-count">(29)</span></div>
+          </div>
+          <div class="filter-section">
+            <div class="filter-title">Size</div>
+            <div style="display:flex;gap:4px;flex-wrap:wrap;">
+              <span class="chip" style="border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);background:var(--color-background-primary);">XS</span>
+              <span class="chip" style="border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);background:var(--color-background-primary);">S</span>
+              <span class="chip" style="border:0.5px solid #2C2C2A;color:#F5F2EF;background:#2C2C2A;">M</span>
+              <span class="chip" style="border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary);background:var(--color-background-primary);">L</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">
+          <div class="product-card-demo">
+            <div class="product-img" style="position:relative;">
+              <span style="font-size:10px;color:var(--color-text-tertiary);">product image</span>
+              <span class="badge badge-new" style="position:absolute;top:6px;left:6px;">NEW</span>
+            </div>
+            <div class="product-info">
+              <div class="product-name">MA-1 Bomber Jacket</div>
+              <div class="product-price">$160.00</div>
+            </div>
+          </div>
+          <div class="product-card-demo">
+            <div class="product-img" style="position:relative;">
+              <span style="font-size:10px;color:var(--color-text-tertiary);">product image</span>
+              <span class="badge badge-excl" style="position:absolute;top:6px;left:6px;">EXCL</span>
+            </div>
+            <div class="product-info">
+              <div class="product-name">Flight Jacket Gen II</div>
+              <div class="product-price">$200.00</div>
+            </div>
+          </div>
+          <div class="product-card-demo">
+            <div class="product-img"><span style="font-size:10px;color:var(--color-text-tertiary);">product image</span></div>
+            <div class="product-info">
+              <div class="product-name">Quilted Liner</div>
+              <div class="product-price">$125.00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body" style="margin-top:0.75rem;">Left sidebar: 200–220px, sticky, collapsible filter sections. Product grid: 3 columns desktop, 2 tablet, 1 mobile. No visible card borders — rely on product photography contrast against the background.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Hero Section</div>
+    <h2>Editorial hero pattern</h2>
+    <div class="hero-demo">
+      <span class="hero-eyebrow">The best hoodies are only here</span>
+      <span class="hero-title">BRAND<br>NAME</span>
+      <div style="display:flex;gap:24px;margin-top:0.5rem;">
+        <span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#5F5E5A;font-weight:500;">INSTAGRAM</span>
+        <span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#5F5E5A;font-weight:500;">FACEBOOK</span>
+        <span style="font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:#5F5E5A;font-weight:500;">TWITTER</span>
+      </div>
+      <div class="hero-cta">DISCOVER NOW <span style="font-size:14px;">→</span></div>
+    </div>
+    <div class="card" style="margin-top:0.75rem;">
+      <div class="card-title">Hero rules</div>
+      <div class="card-body">Display type (48–72px) overlaps the hero photograph using z-index layering — the model image sits below the text. Use a warm background (#F5F2EF) not pure white. Social links sit below the hero as a horizontal row, all caps, even spacing. CTA uses underline-only style, no filled button.</div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <div class="section-label">Components</div>
+    <h2>Product cards</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-title">Image area</div>
+        <div class="card-body">Square or 3:4 ratio. Warm off-white (#EDEAE6) background. No hard borders — background contrast defines the card edge. 4px corner radius max.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Badges</div>
+        <div class="card-body">Position: top-left corner. Only two types: NEW (green fill) and ONLINE EXCLUSIVE (accent fill). Never stack more than one badge. All caps, 10px, 500 weight.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Rating stars</div>
+        <div class="card-body">Shown above product name only when reviews exist. 5-star scale using filled/empty dots or stars. Show count in muted text: "71 reviews".</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Interaction States</div>
+    <h2>Hover and active states</h2>
+    <div class="do-dont">
+      <div class="card do">
+        <div class="tag do-tag">Do</div>
+        <div class="card-body">Subtle background shift on product card hover (secondary bg → primary bg). Use border color transition from tertiary to secondary. Keep transitions under 150ms ease.</div>
+      </div>
+      <div class="card dont">
+        <div class="tag dont-tag">Don't</div>
+        <div class="card-body">Avoid box-shadows, lift effects, or scale transforms on product cards. They break the flat editorial feel and cause layout jank on dense grids.</div>
+      </div>
+      <div class="card do">
+        <div class="tag do-tag">Do</div>
+        <div class="card-body">Underline-style CTAs (Shop Now, View All) with animated width transition. Arrow icons animate 4px right on hover.</div>
+      </div>
+      <div class="card dont">
+        <div class="tag dont-tag">Don't</div>
+        <div class="card-body">Avoid filled color buttons for secondary actions. Reserve solid dark fills only for primary checkout/add-to-cart actions.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <div class="section-label">Spacing & Density</div>
+    <h2>Spacing tokens</h2>
+    <div class="card">
+      <div class="card-body" style="margin-bottom:0.75rem;">Use an 8px base grid. All spacing values should be multiples of 8 (except 4px for tight internal padding).</div>
+      <div class="spacing-demo">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:16px;height:16px;"><span class="sp-label">4</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">xs</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:24px;height:24px;"><span class="sp-label">8</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">sm</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:32px;height:32px;"><span class="sp-label">16</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">md</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:40px;height:40px;"><span class="sp-label">24</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">lg</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:48px;height:48px;"><span class="sp-label">48</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">xl</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div class="sp-block" style="width:56px;height:56px;"><span class="sp-label">80</span></div><span style="font-size:10px;color:var(--color-text-tertiary);">2xl</span></div>
+      </div>
+      <div class="card-body" style="margin-top:0.75rem;">Product grid gap: 16–20px. Sidebar to grid gap: 32px. Section vertical margin: 80px. Container max-width: 1280px with 24px horizontal padding.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Responsive Breakpoints</div>
+    <h2>Responsive behavior</h2>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-title">Mobile (&lt;768px)</div>
+        <div class="card-body">Filters collapse into a slide-up drawer. Product grid: 2 columns. Nav collapses to hamburger. Hero type scales down to 40px.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Tablet (768–1024px)</div>
+        <div class="card-body">Sidebar collapses to horizontal filter chips row. Product grid: 2–3 columns. Navigation stays horizontal.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Desktop (1024px+)</div>
+        <div class="card-body">Full sidebar visible. 3-column product grid (4 optional on wide viewports). Two-row navigation. Marquee ticker full width.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="rule">
+
+  <div class="section">
+    <div class="section-label">Design Principles</div>
+    <h2>Core principles</h2>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Utility first, personality second</div><div class="card-body">Filters, search, sort controls, and product information must work before any editorial styling is layered on top. Function drives the skeleton; the warm palette and type treatment are the skin.</div></div>
+      <div class="card"><div class="card-title">Photography does the heavy lifting</div><div class="card-body">The UI is intentionally neutral so that product photography reads clearly. Avoid competing background colors, patterns, or decorative elements near product images.</div></div>
+      <div class="card"><div class="card-title">Restraint with accent color</div><div class="card-body">The orange-red accent color should feel urgent and rare. If it appears on more than 5% of the visible page at any given time, dilute its usage further.</div></div>
+      <div class="card"><div class="card-title">No dark mode required</div><div class="card-body">The warm off-white palette is the brand. Avoid implementing a dark mode unless specifically requested — it fundamentally changes the aesthetic character of the site.</div></div>
+    </div>
+  </div>
+
+</div>

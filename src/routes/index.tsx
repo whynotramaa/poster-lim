@@ -1,86 +1,257 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { useState, useMemo } from 'react'
+import { useQuery } from 'convex/react'
+import { RiInstagramLine, RiFacebookLine, RiTwitterXLine } from '@remixicon/react'
+import { api } from '../../convex/_generated/api'
+import { PosterCard } from '#/components/posters/PosterCard'
+import { useCartStore } from '#/stores/cartStore'
 
-export const Route = createFileRoute('/')({ component: App })
+const pageSize = 24
 
-function App() {
+export const Route = createFileRoute('/')({ component: BrowsePage })
+
+interface FiltersPanelProps {
+  search: string
+  onSearchChange: (value: string) => void
+  category: string
+  onCategoryChange: (value: string) => void
+  categories: string[] | undefined
+  sort: 'newest' | 'popular' | 'priceAsc' | 'priceDesc'
+  onSortChange: (value: 'newest' | 'popular' | 'priceAsc' | 'priceDesc') => void
+  minPrice: string
+  onMinPriceChange: (value: string) => void
+  maxPrice: string
+  onMaxPriceChange: (value: string) => void
+}
+
+function FiltersPanel({
+  search,
+  onSearchChange,
+  category,
+  onCategoryChange,
+  categories,
+  sort,
+  onSortChange,
+  minPrice,
+  onMinPriceChange,
+  maxPrice,
+  onMaxPriceChange,
+}: FiltersPanelProps) {
   return (
-    <main className="page-wrap px-4 pb-8 pt-14">
-      <section className="island-shell rise-in relative overflow-hidden rounded-[2rem] px-6 py-10 sm:px-10 sm:py-14">
-        <div className="pointer-events-none absolute -left-20 -top-24 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(79,184,178,0.32),transparent_66%)]" />
-        <div className="pointer-events-none absolute -bottom-20 -right-20 h-56 w-56 rounded-full bg-[radial-gradient(circle,rgba(47,106,74,0.18),transparent_66%)]" />
-        <p className="island-kicker mb-3">TanStack Start Base Template</p>
-        <h1 className="display-title mb-5 max-w-3xl text-4xl leading-[1.02] font-bold tracking-tight text-[var(--sea-ink)] sm:text-6xl">
-          Start simple, ship quickly.
-        </h1>
-        <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          This base starter intentionally keeps things light: two routes, clean
-          structure, and the essentials you need to build from scratch.
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href="/about"
-            className="rounded-full border border-[rgba(50,143,151,0.3)] bg-[rgba(79,184,178,0.14)] px-5 py-2.5 text-sm font-semibold text-[var(--lagoon-deep)] no-underline transition hover:-translate-y-0.5 hover:bg-[rgba(79,184,178,0.24)]"
+    <>
+      <div className="space-y-4">
+        <label className="block">
+          <span className="filter-title">Search</span>
+          <input
+            placeholder="Search posters"
+            value={search}
+            onChange={(event) => onSearchChange(event.target.value)}
+            className="filter-input"
+          />
+        </label>
+
+        <div>
+          <p className="filter-title">Category</p>
+          <div className="space-y-1.5">
+            <button
+              type="button"
+              onClick={() => onCategoryChange('')}
+              className={`filter-option ${category === '' ? 'is-selected' : ''}`}
+            >
+              <span>All</span>
+            </button>
+            {categories && categories.map((entry) => (
+              <button
+                type="button"
+                key={entry}
+                onClick={() => onCategoryChange(entry)}
+                className={`filter-option ${category === entry ? 'is-selected' : ''}`}
+              >
+                <span>{entry}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <label className="block">
+          <span className="filter-title">Sort</span>
+          <select
+            value={sort}
+            onChange={(event) =>
+              onSortChange(
+                event.target.value as 'newest' | 'popular' | 'priceAsc' | 'priceDesc',
+              )
+            }
+            className="filter-input"
           >
-            About This Starter
+            <option value="newest">Newest</option>
+            <option value="popular">Most popular</option>
+            <option value="priceAsc">Price: low to high</option>
+            <option value="priceDesc">Price: high to low</option>
+          </select>
+        </label>
+
+        <div className="grid grid-cols-2 gap-2">
+          <label>
+            <span className="filter-title">Min</span>
+            <input
+              type="number"
+              min={0}
+              step="0.01"
+              placeholder="0"
+              value={minPrice}
+              onChange={(event) => onMinPriceChange(event.target.value)}
+              className="filter-input"
+            />
+          </label>
+          <label>
+            <span className="filter-title">Max</span>
+            <input
+              type="number"
+              min={0}
+              step="0.01"
+              placeholder="9999"
+              value={maxPrice}
+              onChange={(event) => onMaxPriceChange(event.target.value)}
+              className="filter-input"
+            />
+          </label>
+        </div>
+      </div>
+    </>
+  )
+}
+
+function BrowsePage() {
+  const addItem = useCartStore((state) => state.addItem)
+  const [category, setCategory] = useState<string>('')
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState<'newest' | 'popular' | 'priceAsc' | 'priceDesc'>(
+    'newest',
+  )
+  const [minPrice, setMinPrice] = useState('')
+  const [maxPrice, setMaxPrice] = useState('')
+  const [filtersOpen, setFiltersOpen] = useState(false)
+
+  // Dynamically fetch categories from database
+  const categories = useQuery(api.posters.getCategories, {})
+
+  // Fetch settings for cover image and ticker
+  const settings = useQuery(api.settings.getSettings, {})
+
+  const posters = useQuery(api.posters.getPosters, {
+    paginationOpts: { numItems: pageSize, cursor: null },
+    category: category || undefined,
+    search: search.trim() || undefined,
+    minPrice: minPrice ? Math.round(Number(minPrice) * 100) : undefined,
+    maxPrice: maxPrice ? Math.round(Number(maxPrice) * 100) : undefined,
+    sort,
+  })
+
+  // Memoize FiltersPanel props to prevent unnecessary re-renders
+  const filtersPanelProps = useMemo(
+    () => ({
+      search,
+      onSearchChange: setSearch,
+      category,
+      onCategoryChange: setCategory,
+      categories,
+      sort,
+      onSortChange: setSort,
+      minPrice,
+      onMinPriceChange: setMinPrice,
+      maxPrice,
+      onMaxPriceChange: setMaxPrice,
+    }),
+    [search, category, categories, sort, minPrice, maxPrice],
+  )
+
+  const heroStyle = {
+    backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.2) 100%), url('${settings?.coverImageUrl || "/cover.png"}')`,
+  }
+
+  return (
+    <main className="page-wrap px-4 pb-14 pt-8 sm:pt-10">
+      <section className="hero-editorial rise-in" style={heroStyle}>
+        <p className="hero-eyebrow">Collector edits for modern walls</p>
+        <h1 className="hero-title">POSTER LIM</h1>
+        <div className="hero-socials">
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[var(--accent)] transition-colors" title="Follow us on Instagram">
+            <RiInstagramLine size={18} />
+            <span>Instagram</span>
           </a>
-          <a
-            href="https://tanstack.com/router"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full border border-[rgba(23,58,64,0.2)] bg-white/50 px-5 py-2.5 text-sm font-semibold text-[var(--sea-ink)] no-underline transition hover:-translate-y-0.5 hover:border-[rgba(23,58,64,0.35)]"
-          >
-            Router Guide
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[var(--accent)] transition-colors" title="Follow us on Facebook">
+            <RiFacebookLine size={18} />
+            <span>Facebook</span>
+          </a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5 hover:text-[var(--accent)] transition-colors" title="Follow us on Twitter">
+            <RiTwitterXLine size={18} />
+            <span>Twitter</span>
           </a>
         </div>
       </section>
 
-      <section className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          [
-            'Type-Safe Routing',
-            'Routes and links stay in sync across every page.',
-          ],
-          [
-            'Server Functions',
-            'Call server code from your UI without creating API boilerplate.',
-          ],
-          [
-            'Streaming by Default',
-            'Ship progressively rendered responses for faster experiences.',
-          ],
-          [
-            'Tailwind Native',
-            'Design quickly with utility-first styling and reusable tokens.',
-          ],
-        ].map(([title, desc], index) => (
-          <article
-            key={title}
-            className="island-shell feature-card rise-in rounded-2xl p-5"
-            style={{ animationDelay: `${index * 90 + 80}ms` }}
-          >
-            <h2 className="mb-2 text-base font-semibold text-[var(--sea-ink)]">
-              {title}
-            </h2>
-            <p className="m-0 text-sm text-[var(--sea-ink-soft)]">{desc}</p>
-          </article>
-        ))}
+      <section className="mt-8 lg:hidden">
+        <button
+          type="button"
+          onClick={() => setFiltersOpen(true)}
+          className="rounded-md border border-[var(--line)] bg-[var(--surface)] px-4 py-2 text-xs font-semibold tracking-[0.1em] uppercase"
+        >
+          Filters & Sort
+        </button>
       </section>
 
-      <section className="island-shell mt-8 rounded-2xl p-6">
-        <p className="island-kicker mb-2">Quick Start</p>
-        <ul className="m-0 list-disc space-y-2 pl-5 text-sm text-[var(--sea-ink-soft)]">
-          <li>
-            Edit <code>src/routes/index.tsx</code> to customize the home page.
-          </li>
-          <li>
-            Update <code>src/components/Header.tsx</code> and{' '}
-            <code>src/components/Footer.tsx</code> for brand links.
-          </li>
-          <li>
-            Add routes in <code>src/routes</code> and tweak visual tokens in{' '}
-            <code>src/styles.css</code>.
-          </li>
-        </ul>
+      {filtersOpen ? (
+        <div className="fixed inset-0 z-50 bg-black/35 lg:hidden">
+          <div className="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto rounded-t-2xl bg-[var(--surface)] p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="m-0 text-lg font-semibold tracking-[0.04em] uppercase">Filters</h2>
+              <button
+                type="button"
+                onClick={() => setFiltersOpen(false)}
+                className="text-xs font-semibold tracking-[0.1em] uppercase"
+              >
+                Close
+              </button>
+            </div>
+            <FiltersPanel {...filtersPanelProps} />
+          </div>
+        </div>
+      ) : null}
+
+      <section className="mt-8 grid gap-8 lg:grid-cols-[220px_1fr]">
+        <aside className="hidden lg:block">
+          <div className="sticky top-36 rounded-md border border-[var(--line)] bg-[var(--surface)] p-4">
+            <FiltersPanel {...filtersPanelProps} />
+          </div>
+        </aside>
+
+        <div id="browse-grid">
+          {posters === undefined ? (
+            <p className="text-sm text-[var(--sea-ink-soft)]">Loading posters...</p>
+          ) : posters.page.length === 0 ? (
+            <p className="text-sm text-[var(--sea-ink-soft)]">No posters found.</p>
+          ) : (
+            <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {posters.page.map((poster) => (
+                <PosterCard
+                  key={poster._id}
+                  poster={poster}
+                  onAddToCart={(selectedPoster) =>
+                    addItem({
+                      posterId: selectedPoster._id,
+                      title: selectedPoster.title,
+                      imageUrl: selectedPoster.imageUrl,
+                      price: selectedPoster.price,
+                      quantity: 1,
+                      selectedSize: selectedPoster.sizeInventory?.find((entry) => entry.stock > 0)?.size,
+                    })
+                  }
+                />
+              ))}
+            </section>
+          )}
+        </div>
       </section>
     </main>
   )
